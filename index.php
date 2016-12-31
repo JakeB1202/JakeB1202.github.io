@@ -15,10 +15,29 @@
 
   <link href="./css/bootstrap.min.css" rel="stylesheet">
   <link href="./css/animations.css" rel="stylesheet">
-  <link href="font.css" rel="stylesheet">
 </head>
 
 <style>
+
+/* FONT CSS
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+@font-face {
+    font-family: 'whipsmartregular';
+    src: url('whipsmart.woff2') format('woff2'),
+         url('whipsmart.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'luckiest_guyregular';
+    src: url('luckiestguy.woff2') format('woff2'),
+         url('luckiestguy.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
 
 /* GENERAL CSS
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
