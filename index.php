@@ -55,6 +55,7 @@ body {
   color: #fff;
   overflow-x: hidden;
   padding-bottom: 50px;
+  font-family: 'whipsmartregular';
 }
 
 /* INTRO SECTION
@@ -62,7 +63,6 @@ body {
 
 .intro {
   background: #F45B69;
-  font-family: 'whipsmartregular';
   padding: 100px 0;
 }
 
