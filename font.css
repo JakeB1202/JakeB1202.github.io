@@ -1,0 +1,15 @@
+@font-face {
+    font-family: 'whipsmartregular';
+    src: url('whipsmart.woff2') format('woff2'),
+         url('whipsmart.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'luckiest_guyregular';
+    src: url('luckiestguy.woff2') format('woff2'),
+         url('luckiestguy.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}

@@ -1,13 +1,7 @@
-<?php
-/* Short and sweet */
-define('WP_USE_THEMES', false);
-require('./blog/wp-blog-header.php');
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Creating the big life!</title>
+  <title>Creating the big life - Title</title>
   <meta name="viewport" content="user-scalable=yes">
   <meta name="author" content="Alison McCloskey">
   <meta name="keywords" content="Creating the big life!">
@@ -69,7 +63,6 @@ h1 {
 
 .info {
   background: #F45B69;
-  font-family: 'whipsmartregular';
   padding: 100px 0;
 }
 
@@ -223,56 +216,106 @@ time {
     </nav>
   </section>
 
-  <section class="timeline">
-    <ul>
-      <li>
-        <div class = "animated speed1 bounceInLeft">
-          <time>Parenting</time> Testing parenting block.
-        </div>
-      </li>
-      <li>
-        <div class = "animated speed1 bounceInRight">
-          <time>Relationships</time> Testing relationships block.
-        </div>
-      </li>
-      <li>
-        <div class = "animated speed1 bounceInLeft">
-          <time>Coaching</time> Testing the coaching block.
-        </div>
-      </li>
-    </ul>
-  </section>
 
-  <section id="info" class="info">
-    <h1 class="hidden">Tweets</h1>
-    <br>
-    <div class="container">
-      <section id="newscontent" class="col-xs-8">
-        <h2 class="text-white">Latest Tweets</h2>
-        <a href="https://twitter.com/alicoaching" data-chrome="noheader nofooter transparent noscrollbar" data-tweet-limit="1" link-color="#43ac6a" class="twitter-timeline">Tweets by @alicoaching</a>
-        <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-      </section>
-      <section id="sidebar" class="col-xs-4 content-container">
-        <div class="content-inner">
-          <h2>Latest Blog Posts</h2>
-          <?php
-          // Get the last 3 posts.
-          global $post;
-          $args = array( 'posts_per_page' => 3 );
-          $myposts = get_posts( $args );
-
-          foreach( $myposts as $post ) :	setup_postdata($post); ?>
-
-          <a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>">
-            <?php the_title(); ?></a><br />
-        <?php endforeach; ?>
-
-        </div>
-      </section>
+  <form class="form-horizontal" role="form" method="post" action="index.php">
+	<div class="form-group">
+		<label for="name" class="col-sm-2 control-label">Name</label>
+		<div class="col-sm-10">
+			<input type="text" class="form-control" id="name" name="name" placeholder="First & Last Name" value="<?php echo htmlspecialchars($_POST['name']); ?>">
+			<?php echo "<p class='text-danger'>$errName</p>";?>
+		</div>
 	</div>
-  </section>
+	<div class="form-group">
+		<label for="email" class="col-sm-2 control-label">Email</label>
+		<div class="col-sm-10">
+			<input type="email" class="form-control" id="email" name="email" placeholder="example@domain.com" value="<?php echo htmlspecialchars($_POST['email']); ?>">
+			<?php echo "<p class='text-danger'>$errEmail</p>";?>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="message" class="col-sm-2 control-label">Message</label>
+		<div class="col-sm-10">
+			<textarea class="form-control" rows="4" name="message"><?php echo htmlspecialchars($_POST['message']);?></textarea>
+			<?php echo "<p class='text-danger'>$errMessage</p>";?>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="human" class="col-sm-2 control-label">2 + 3 = ?</label>
+		<div class="col-sm-10">
+			<input type="text" class="form-control" id="human" name="human" placeholder="Your Answer">
+			<?php echo "<p class='text-danger'>$errHuman</p>";?>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-sm-10 col-sm-offset-2">
+			<input id="submit" name="submit" type="submit" value="Send" class="btn btn-primary">
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-sm-10 col-sm-offset-2">
+			<?php echo $result; ?>
+		</div>
+	</div>
+</form>
 
-  <div class="footer-bar" style="background-color: rgba(0, 0, 0, 0.4);">
-    <div class="container">
-      <p class="footer-text">Copyright &copy; Alison McCloskey &bull; <a class="footer-link" href="http://cobalt-mc.com/contact">Contact</a> &bull; <a class="footer-link" href="http://cobalt-mc.com/privacy">Privacy</a> &bull; <a class="footer-link" href="http://cobalt-mc.com/terms">Terms </a>&bull; Website by Jake Brown</p>
-    </div>
+<?php
+if(!isset($_POST['submit']))
+{
+	//This page should not be accessed directly. Need to submit the form.
+	echo "error; you need to submit the form!";
+}
+$name = $_POST['name'];
+$visitor_email = $_POST['email'];
+$message = $_POST['message'];
+
+//Validate first
+if(empty($name)||empty($visitor_email))
+{
+    echo "Name and email are mandatory!";
+    exit;
+}
+
+if(IsInjected($visitor_email))
+{
+    echo "Bad email value!";
+    exit;
+}
+
+$email_from = 'jakebrown1202@yahoo.com';//<== update the email address
+$email_subject = "New Form submission";
+$email_body = "You have received a new message from the user $name.\n".
+    "Here is the message:\n $message".
+
+$to = "tom@amazing-designs.com";//<== update the email address
+$headers = "From: $email_from \r\n";
+$headers .= "Reply-To: $visitor_email \r\n";
+//Send the email!
+mail($to,$email_subject,$email_body,$headers);
+//done. redirect to thank-you page.
+header('Location: thank-you.html');
+
+
+// Function to validate against any email injection attempts
+function IsInjected($str)
+{
+  $injections = array('(\n+)',
+              '(\r+)',
+              '(\t+)',
+              '(%0A+)',
+              '(%0D+)',
+              '(%08+)',
+              '(%09+)'
+              );
+  $inject = join('|', $injections);
+  $inject = "/$inject/i";
+  if(preg_match($inject,$str))
+    {
+    return true;
+  }
+  else
+    {
+    return false;
+  }
+}
+
+?>
